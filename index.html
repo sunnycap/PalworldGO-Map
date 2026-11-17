@@ -1,12 +1,16 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>PalworldGO Map</title>
 
-    <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
+    <link
+        href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css"
+        rel="stylesheet"
+    >
 
     <style>
         html, body, #map {
@@ -18,6 +22,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <div id="map"></div>
@@ -25,31 +30,53 @@
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
 
 <script>
+    // Tijdelijke testlocatie in de omgeving van
+    // de Bosscheweg in Drunen.
+    const testLocation = [5.13, 51.69];
+
+    // MapLibre kaart
     const map = new maplibregl.Map({
         container: 'map',
         style: 'https://tiles.openfreemap.org/styles/liberty',
-        center: [5.3, 52.2],
-        zoom: 7
+        center: testLocation,
+        zoom: 15
     });
 
-    map.addControl(new maplibregl.NavigationControl());
-// Player marker
-const playerMarker = new maplibregl.Marker({
-    color: '#0088ff'
-})
-.setLngLat([5.3, 52.2])
-.addTo(map);
+    // Zoomknoppen
+    map.addControl(
+        new maplibregl.NavigationControl(),
+        'top-right'
+    );
 
-// Function called by Unreal later
-window.updatePlayerLocation = function(latitude, longitude) {
-    playerMarker.setLngLat([longitude, latitude]);
+    // Blauwe speler-marker
+    const playerMarker = new maplibregl.Marker({
+        color: '#0088ff'
+    })
+    .setLngLat(testLocation)
+    .addTo(map);
 
-    map.flyTo({
-        center: [longitude, latitude],
-        zoom: 16,
-        essential: true
-    });
-};
+    // Functie waarmee Unreal later GPS-coördinaten kan doorgeven
+    window.updatePlayerLocation = function(latitude, longitude) {
+
+        const newLocation = [longitude, latitude];
+
+        playerMarker.setLngLat(newLocation);
+
+        map.flyTo({
+            center: newLocation,
+            zoom: 16,
+            essential: true
+        });
+    };
+
+    // Functie om de kaart handmatig te verplaatsen
+    window.setMapLocation = function(latitude, longitude, zoom) {
+        map.flyTo({
+            center: [longitude, latitude],
+            zoom: zoom || 16,
+            essential: true
+        });
+    };
 </script>
 
 </body>
