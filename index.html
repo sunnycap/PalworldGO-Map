@@ -4,13 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>PalworldGO Map</title>
 
-    <link
-        href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css"
-        rel="stylesheet"
-    >
+    <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 
     <style>
         html, body, #map {
@@ -30,23 +26,19 @@
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
 
 <script>
-    // Tijdelijke testlocatie in de omgeving van
-    // de Bosscheweg in Drunen.
-    const testLocation = [5.13, 51.69];
+    // Testlocatie
+    const testLocation = [5.147576, 51.686787];
 
-    // MapLibre kaart
+    // Kaart maken
     const map = new maplibregl.Map({
         container: 'map',
         style: 'https://tiles.openfreemap.org/styles/liberty',
         center: testLocation,
-        zoom: 15
+        zoom: 16
     });
 
     // Zoomknoppen
-    map.addControl(
-        new maplibregl.NavigationControl(),
-        'top-right'
-    );
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
     // Blauwe speler-marker
     const playerMarker = new maplibregl.Marker({
@@ -55,9 +47,8 @@
     .setLngLat(testLocation)
     .addTo(map);
 
-    // Functie waarmee Unreal later GPS-coördinaten kan doorgeven
+    // GPS-koppeling voor Unreal
     window.updatePlayerLocation = function(latitude, longitude) {
-
         const newLocation = [longitude, latitude];
 
         playerMarker.setLngLat(newLocation);
@@ -69,7 +60,7 @@
         });
     };
 
-    // Functie om de kaart handmatig te verplaatsen
+    // Kaart verplaatsen
     window.setMapLocation = function(latitude, longitude, zoom) {
         map.flyTo({
             center: [longitude, latitude],
