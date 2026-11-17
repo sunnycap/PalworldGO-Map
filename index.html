@@ -33,6 +33,23 @@
     });
 
     map.addControl(new maplibregl.NavigationControl());
+// Player marker
+const playerMarker = new maplibregl.Marker({
+    color: '#0088ff'
+})
+.setLngLat([5.3, 52.2])
+.addTo(map);
+
+// Function called by Unreal later
+window.updatePlayerLocation = function(latitude, longitude) {
+    playerMarker.setLngLat([longitude, latitude]);
+
+    map.flyTo({
+        center: [longitude, latitude],
+        zoom: 16,
+        essential: true
+    });
+};
 </script>
 
 </body>
